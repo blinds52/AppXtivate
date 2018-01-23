@@ -3,6 +3,7 @@ using Mono.Options;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using static AppXtivate.ComImports.ShellItemHelpers;
 
 namespace appxtivate
@@ -78,6 +79,21 @@ namespace appxtivate
             ActivateFile(args[0], args[1]);
         }
 
+        static async Task RunList(string[] args)
+        {
+            //var packageManager = new Windows.Management.Deployment.PackageManager();
+            var catalog = Windows.ApplicationModel.PackageCatalog.OpenForCurrentUser();
+            foreach (var package in packageManager.FindPackages())
+            {
+                Console.WriteLine("{0}", package.DisplayName);
+                foreach (var appListEntry in await package.GetAppListEntriesAsync())
+                {
+                    Console.WriteLine(" - {0}", appListEntry.DisplayInfo.DisplayName);
+                }
+            }
+
+        }
+
         static Command RunCommand()
         {
             var runMode = RunMode.Auto;
@@ -113,7 +129,11 @@ namespace appxtivate
             suite = new CommandSet("AppXtivate")
             {
                 "usage: suite-name COMMAND [OPTIONS]+",
-                RunCommand()
+                RunCommand(),
+                new Command("list")
+                {
+                    Run = a => { RunList(a.ToArray()).Wait(); }
+                }
             };
             return suite.Run(args);
         }
