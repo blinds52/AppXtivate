@@ -8,6 +8,9 @@ using static AppXtivate.ComImports.ShellItemHelpers;
 
 namespace appxtivate
 {
+    // https://github.com/david-risney/AppxUtilities
+    // https://code.msdn.microsoft.com/windowsapps/Package-Manager-Inventory-ee821079/sourcecode?fileId=42807&pathId=1141337799
+    // https://github.com/jbe2277/waf/wiki/Using-Windows-Runtime-in-a-.NET-desktop-application
     class Program
     {
         enum RunMode
